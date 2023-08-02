@@ -1,4 +1,4 @@
-# TinyHunter
+# Tinyhunter
 
 A tiny framework to run searcher for Flashbots mev-share on Goerli network
 
