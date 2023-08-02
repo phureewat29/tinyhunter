@@ -1,0 +1,48 @@
+{
+  "name": "tinyhunter",
+  "version": "1.0.0",
+  "description": "A tiny framework to run a MEV searcher for Flashbots mev-share on Goerli network",
+  "main": "index.js",
+  "scripts": {
+    "build": "rimraf ./build && tsc",
+    "scraper": "ts-node src/scraper.ts",
+    "send-tx": "ts-node src/sendTx.ts",
+    "backrun": "ts-node src/backrun.ts",
+    "lint": "eslint . --ext .ts",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "prettier-watch": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
+    "test": "jest",
+    "test:dev": "jest --watchAll"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run test && npm run prettier-format && npm run lint"
+    }
+  },
+  "keywords": [],
+  "author": "Phureewat A",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "@types/node": "^18.6.1",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^26.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.1",
+    "jest": "^29.6.2",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@flashbots/mev-share-client": "^0.7.6",
+    "@logtail/node": "^0.4.5",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.6.7"
+  }
+}
