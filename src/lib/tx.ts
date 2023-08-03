@@ -1,9 +1,12 @@
 import { hexlify, toUtf8Bytes, TransactionRequest, Wallet } from 'ethers';
-import MevShareClient, { HintPreferences } from '@flashbots/mev-share-client';
+import MevShareClient, {
+  BundleParams,
+  TransactionOptions,
+} from '@flashbots/mev-share-client';
 
-const TX_GAS_LIMIT = 400000;
+const TX_GAS_LIMIT = 420000;
 const MAX_GAS_PRICE = 40n;
-const MAX_PRIORITY_FEE = 0n;
+const MAX_PRIORITY_FEE = 2n;
 const GWEI = 10n ** 9n;
 
 export const buildTx = async (
@@ -11,7 +14,7 @@ export const buildTx = async (
   flair?: string,
   tip?: bigint,
 ) => {
-  const tipActual = tip ? tip.valueOf() : BigInt(0);
+  const tipActual = tip ? tip.valueOf() : 0n;
   const tx: TransactionRequest = {
     type: 2,
     chainId: 5, // goerli
@@ -33,8 +36,31 @@ export const buildTx = async (
 export const sendTx = async (
   mevShare: MevShareClient,
   signedTx: string,
-  hints?: HintPreferences,
   maxBlockNumber?: number,
 ) => {
-  return mevShare.sendTransaction(signedTx, { hints, maxBlockNumber });
+  const txParams: TransactionOptions = {
+    hints: { calldata: false },
+    maxBlockNumber,
+  };
+  return mevShare.sendTransaction(signedTx, txParams);
+};
+
+export const sendBundle = async (
+  mevShare: MevShareClient,
+  signedTx: string,
+  targetBlock: number,
+) => {
+  const bundleParams: BundleParams = {
+    inclusion: {
+      block: targetBlock,
+      maxBlock: targetBlock + 3,
+    },
+    body: [{ tx: signedTx, canRevert: false }],
+    privacy: { hints: { calldata: true } },
+  };
+  const sendBundleResult = await mevShare.sendBundle(bundleParams);
+  return {
+    bundleParams,
+    sendBundleResult,
+  };
 };

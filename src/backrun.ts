@@ -1,4 +1,4 @@
-import { IPendingTransaction } from '@flashbots/mev-share-client';
+import { BundleParams, IPendingTransaction } from '@flashbots/mev-share-client';
 import { initMevShare } from './lib/client';
 import { buildTx } from './lib/tx';
 
@@ -15,15 +15,15 @@ async function backrunAttempt(
   );
 
   try {
-    const bundle = {
+    const bundleParams: BundleParams = {
       inclusion: {
         block: currentBlockNumber + 1,
         maxBlock: currentBlockNumber + NUM_TARGET_BLOCKS,
       },
       body: [{ hash: pendingTxHash }, { tx: signedTx, canRevert: false }],
     };
-    const sendBundleResult = await mevShare.sendBundle(bundle);
-    console.log('Bundle Hash: ' + sendBundleResult.bundleHash);
+    const sendBundleResult = await mevShare.sendBundle(bundleParams);
+    console.log('bundle hash: ' + sendBundleResult.bundleHash);
   } catch (e) {
     console.log('err', e);
   }
