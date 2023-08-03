@@ -2,7 +2,7 @@ import { HintPreferences } from '@flashbots/mev-share-client';
 import { buildTx, sendTx } from './lib/tx';
 import { initMevShare } from './lib/client';
 
-const { mevShare, executorWallet, provider } = initMevShare();
+const { mevShare, executorWallet } = initMevShare();
 
 const main = async () => {
   const hints: HintPreferences = {
@@ -12,7 +12,7 @@ const main = async () => {
     functionSelector: true,
   };
   console.log('Sending tx to Flashbots');
-  const { signedTx } = await buildTx(executorWallet, mevShare, provider);
+  const { signedTx } = await buildTx(executorWallet);
   const txHash = await sendTx(mevShare, signedTx, hints);
   console.log('TX Hash:', txHash);
 };
