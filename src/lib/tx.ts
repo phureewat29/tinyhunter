@@ -4,10 +4,12 @@ import MevShareClient, {
   TransactionOptions,
 } from '@flashbots/mev-share-client';
 
-const TX_GAS_LIMIT = 420000;
+const TX_GAS_LIMIT = 42000;
 const MAX_GAS_PRICE = 40n;
 const MAX_PRIORITY_FEE = 2n;
 const GWEI = 10n ** 9n;
+
+const BLOCKS_TO_TRY = 24;
 
 export const buildTx = async (
   executorWallet: Wallet,
@@ -27,10 +29,7 @@ export const buildTx = async (
     gasLimit: TX_GAS_LIMIT,
   };
 
-  return {
-    tx,
-    signedTx: await executorWallet.signTransaction(tx),
-  };
+  return { executorWallet, tx };
 };
 
 export const sendTx = async (
@@ -39,7 +38,12 @@ export const sendTx = async (
   maxBlockNumber?: number,
 ) => {
   const txParams: TransactionOptions = {
-    hints: { calldata: false },
+    hints: {
+      logs: true,
+      contractAddress: true,
+      calldata: true,
+      functionSelector: true,
+    },
     maxBlockNumber,
   };
   return mevShare.sendTransaction(signedTx, txParams);
@@ -53,10 +57,17 @@ export const sendBundle = async (
   const bundleParams: BundleParams = {
     inclusion: {
       block: targetBlock,
-      maxBlock: targetBlock + 3,
+      maxBlock: targetBlock + BLOCKS_TO_TRY,
     },
     body: [{ tx: signedTx, canRevert: false }],
-    privacy: { hints: { calldata: true } },
+    privacy: {
+      hints: {
+        logs: true,
+        contractAddress: true,
+        calldata: true,
+        functionSelector: true,
+      },
+    },
   };
   const sendBundleResult = await mevShare.sendBundle(bundleParams);
   return {

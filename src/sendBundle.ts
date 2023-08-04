@@ -5,7 +5,7 @@ const { provider, mevShare, executorWallet } = initMevShare();
 
 const main = async () => {
   console.log('sending bundle to flashbots');
-  const { signedTx } = await buildTx(
+  const { tx } = await buildTx(
     executorWallet,
     'tinybundle',
     BigInt(1e9) * BigInt(1e7), // tip 0.01 ETH
@@ -13,7 +13,7 @@ const main = async () => {
   const currentBlockNumber = await provider.getBlockNumber();
   const { bundleParams, sendBundleResult } = await sendBundle(
     mevShare,
-    signedTx,
+    await executorWallet.signTransaction(tx),
     currentBlockNumber + 1,
   );
   console.log('bundle params', bundleParams);
