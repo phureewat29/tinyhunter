@@ -12,9 +12,20 @@ vim .env
 
 ### Flashbots CTF
 
-`yarn ctf:simple 0x000000` - listen for `activateRewardSimple` tx upon each constrain to build the bundle, see avaliable contracts in `src/ctf-simple.ts`
+`yarn ctf:simple 0x1cddb0ba9265bb3098982238637c2872b7d12474`
 
-`yarn ctf:magic-v1` - listen for `activateRewardMagicNumber` tx to build the set of bundle within magic number range
+`yarn ctf:simple 0x98997b55bb271e254bec8b85763480719dab0e53`
+
+`yarn ctf:simple 0x65459dd36b03af9635c06bad1930db660b968278`
+
+`yarn ctf:simple 0x20a1a5857fdff817aa1bd8097027a841d4969aa5`
+
+
+`yarn ctf:magic-v1`
+
+`yarn ctf:magic-v2`
+
+`yarn ctf:magic-v3`
 
 ### Avaliable scripts
 
