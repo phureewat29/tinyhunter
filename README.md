@@ -10,9 +10,11 @@ cp .env.example .env
 vim .env
 ```
 
-### CTF
+### Flashbots CTF
 
-`yarn ctf:simple 0x0000000` - listen for `Activate` event to call claimReward function
+`yarn ctf:simple 0x000000` - listen for `activateRewardSimple` tx upon each constrain to build the bundle, see avaliable contracts in `src/ctf-simple.ts`
+
+`yarn ctf:magic-v1` - listen for `activateRewardMagicNumber` tx to build the set of bundle within magic number range
 
 ### Avaliable scripts
 
