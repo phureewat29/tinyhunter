@@ -9,15 +9,14 @@ const main = async () => {
 
   // listen for txs
   mevShare.on('transaction', async (pendingTx: IPendingTransaction) => {
-    console.info('txs', pendingTx);
+    if (
+      pendingTx.functionSelector === '0xa3c356e4' &&
+      pendingTx.callData === '0xa3c356e4'
+    ) {
+      console.info('found activeRewardSimple tx!', pendingTx.hash);
+      console.dir(pendingTx, { depth: null });
+    }
   });
-
-  // listen for bundles
-  mevShare.on('bundle', async (bundle: IPendingBundle) => {
-    console.info('bundle', bundle);
-  });
-
-  console.log('listening for transactions and bundles...');
 };
 
 main();

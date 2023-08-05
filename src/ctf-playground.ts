@@ -4,7 +4,7 @@ import { BundleParams } from '@flashbots/mev-share-client';
 import { initMevShare } from './lib/client';
 import { MEV_SHARE_CTF_SIMPLE_ABI } from './lib/abi';
 
-const TX_GAS_LIMIT = 400000;
+const TX_GAS_LIMIT = 800000;
 const MAX_GAS_PRICE = 500n;
 const MAX_PRIORITY_FEE = 100n;
 const GWEI = 10n ** 9n;
@@ -44,7 +44,7 @@ const main = async () => {
     maxFeePerGas: MAX_GAS_PRICE * GWEI + TIP,
     maxPriorityFeePerGas: MAX_PRIORITY_FEE * GWEI + TIP,
     gasLimit: TX_GAS_LIMIT,
-    nonce: nonce + 1,
+    nonce: nonce,
   };
   const signedTx = await executorWallet.signTransaction(claimTx);
   console.log('signed tx', signedTx);
