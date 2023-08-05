@@ -1,4 +1,4 @@
-import { Contract } from 'ethers';
+import { Contract, getCreate2Address, keccak256 } from 'ethers';
 
 import { BundleParams, IPendingTransaction } from '@flashbots/mev-share-client';
 import { initMevShare } from './lib/client';
@@ -12,6 +12,8 @@ const TIP = 10n * GWEI;
 
 const BLOCKS_TO_TRY = 3;
 const CONTRACT_ADDRESS = '0x5ea0fea0164e5aa58f407debb344876b5ee10dea';
+const CONTRACT_CHILD_BYTECODE =
+  '0x60a060405233608052436000556080516101166100266000396000606f01526101166000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c806396b81609146037578063b88a802f146051575b600080fd5b603f60005481565b60405190815260200160405180910390f35b60576059565b005b4360005414606657600080fd5b600080819055507f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663720ecf456040518163ffffffff1660e01b8152600401600060405180830381600087803b15801560c757600080fd5b505af115801560da573d6000803e3d6000fd5b5050505056fea26469706673582212207a00db890eff47285ac0d9c9b8735727d476952aa87b45ee82fd6bb4f42c6fa764736f6c63430008130033';
 
 const { mevShare, executorWallet, provider } = initMevShare();
 const contract = new Contract(
@@ -63,7 +65,7 @@ async function backrunHandler(
   console.log('bundle hash', sendBundleResult.bundleHash);
 }
 
-const ruleFunc = (pendingTx: IPendingTransaction) =>
+const ruleAddrFunc = (pendingTx: IPendingTransaction) =>
   (pendingTx.logs || []).some(
     (log) =>
       log.data &&
@@ -75,17 +77,45 @@ const ruleFunc = (pendingTx: IPendingTransaction) =>
       ),
   );
 
+const ruleSaltFunc = (pendingTx: IPendingTransaction) =>
+  (pendingTx.logs || []).some(
+    (log) =>
+      log.data &&
+      log.address === '0x5ea0fea0164e5aa58f407debb344876b5ee10dea' &&
+      log.topics.some(
+        (topic) =>
+          topic ===
+          '0x71fd33d3d871c60dc3d6ecf7c8e5bb086aeb6491528cce181c289a411582ff1c',
+      ),
+  );
+
 const main = async () => {
-  let newContractAddress;
+  let newContractAddress: string;
 
   mevShare.on('transaction', async (pendingTx: IPendingTransaction) => {
-    if (ruleFunc(pendingTx)) {
+    if (ruleSaltFunc(pendingTx)) {
+      try {
+        const [salt] = contract.interface.decodeEventLog(
+          'ActivateBySalt',
+          (pendingTx.logs && pendingTx.logs[0].data) || '',
+        );
+        newContractAddress = await getCreate2Address(
+          CONTRACT_ADDRESS,
+          salt,
+          keccak256(CONTRACT_CHILD_BYTECODE),
+        );
+        console.log('[salt] new contract address', newContractAddress);
+        backrunHandler(pendingTx.hash, newContractAddress);
+      } catch (e) {
+        return;
+      }
+    } else if (ruleAddrFunc(pendingTx)) {
       try {
         [newContractAddress] = contract.interface.decodeEventLog(
           'Activate',
           (pendingTx.logs && pendingTx.logs[0].data) || '',
         );
-        console.log('new contract address', newContractAddress);
+        console.log('[addr] new contract address', newContractAddress);
         backrunHandler(pendingTx.hash, newContractAddress);
       } catch (e) {
         return;

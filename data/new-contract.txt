@@ -16,3 +16,22 @@
   gasUsed: 160000n,
   mevGasPrice: 50000000n
 }
+
+// by salt
+{
+  hash: '0x9f0643d0b2cc2458d92b26f99971a9960196d0765ebc3c843d19668ddfd44324',
+  logs: [
+    {
+      address: '0x5ea0fea0164e5aa58f407debb344876b5ee10dea',
+      topics: [
+        '0x71fd33d3d871c60dc3d6ecf7c8e5bb086aeb6491528cce181c289a411582ff1c'
+      ],
+      data: '0xed5c76f42a2d69e388c18debd3a55b4525d59488550159cbfe481ea71bfe24bf'
+    }
+  ],
+  to: null,
+  functionSelector: null,
+  callData: null,
+  gasUsed: 160000n,
+  mevGasPrice: 50000000n
+}
