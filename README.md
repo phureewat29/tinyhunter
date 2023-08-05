@@ -1,6 +1,6 @@
 # Tinyhunter
 
-A tiny framework to run searcher for Flashbots mev-share on Goerli network
+A tiny framework to participate Flashbots CTF
 
 ### Setup
 
@@ -30,7 +30,7 @@ vim .env
 
 `yarn ctf:triple`
 
-### Avaliable scripts
+### Playground Scripts
 
 `yarn listener` - listening for pending transaction and new bundle
 
