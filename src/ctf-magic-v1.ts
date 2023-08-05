@@ -45,7 +45,7 @@ async function backrunHandler(
       gasLimit: TX_GAS_LIMIT,
       nonce: nonce + i,
     });
-    txs.push({ tx: signedTx, canRevert: false });
+    txs.push({ tx: signedTx, canRevert: true });
   }
 
   const bundleParams: BundleParams = {
@@ -61,7 +61,13 @@ async function backrunHandler(
 const ruleFunc = (pendingTx: IPendingTransaction) =>
   (pendingTx.logs || []).some(
     (log) =>
-      log.data && log.address === '0x118bcb654d9a7006437895b51b5cd4946bf6cdc2',
+      log.data &&
+      log.address === '0x118bcb654d9a7006437895b51b5cd4946bf6cdc2' &&
+      log.topics.some(
+        (topic) =>
+          topic ===
+          '0x86a27c2047f889fafe51029e28e24f466422abe8a82c0c27de4683dda79a0b5d',
+      ),
   );
 
 const main = async () => {
