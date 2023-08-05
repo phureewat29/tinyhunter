@@ -22,12 +22,25 @@ const contract = new Contract(
 
 async function backrunHandler(
   pendingTxHash: string,
-  newlyDeployedContract: Contract,
+  newContractAddress: string,
 ) {
   const currentBlock = await provider.getBlockNumber();
+  const nonce = await executorWallet.getNonce('latest');
   console.log('current block', currentBlock);
 
-  const nonce = await executorWallet.getNonce('latest');
+  const newlyDeployedContract = new Contract(
+    newContractAddress,
+    [
+      {
+        inputs: [],
+        name: 'claimReward',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function',
+      },
+    ],
+    executorWallet,
+  );
   const tx = await newlyDeployedContract.claimReward.populateTransaction();
   const signedTx = await executorWallet.signTransaction({
     ...tx,
@@ -73,12 +86,7 @@ const main = async () => {
           (pendingTx.logs && pendingTx.logs[0].data) || '',
         );
         console.log('new contract address', newContractAddress);
-        const newlyDeployedContract = new Contract(
-          newContractAddress,
-          MEV_SHARE_CTF_NEW_CONTRACT,
-          executorWallet,
-        );
-        backrunHandler(pendingTx.hash, newlyDeployedContract);
+        backrunHandler(pendingTx.hash, newContractAddress);
       } catch (e) {
         return;
       }
