@@ -5,7 +5,7 @@ import { initMevShare } from './lib/client';
 import { MEV_SHARE_CTF_SIMPLE_ABI } from './lib/abi';
 
 const TX_GAS_LIMIT = 500000;
-const MAX_GAS_PRICE = 500n;
+const MAX_GAS_PRICE = 100n;
 const MAX_PRIORITY_FEE = 100n;
 const GWEI = 10n ** 9n;
 const TIP = 100n * GWEI;
@@ -95,8 +95,9 @@ const modeResolver = () => {
 };
 
 const main = async () => {
+  const ruleFunc = modeResolver();
+  console.log('rule:', ruleFunc);
   mevShare.on('transaction', async (pendingTx: IPendingTransaction) => {
-    const ruleFunc = modeResolver();
     if (ruleFunc(pendingTx)) {
       backrunHandler(pendingTx.hash);
     }

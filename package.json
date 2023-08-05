@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf ./build && tsc",
     "ctf:simple": "ts-node src/ctf-simple.ts",
-    "ctf:playground": "ts-node src/ctf-playground.ts",
+    "ctf:magic-v1": "ts-node src/ctf-magic-v1.ts",
     "capture": "ts-node src/capture.ts",
     "history": "ts-node src/history.ts",
     "listener": "ts-node src/listener.ts",
@@ -17,8 +17,7 @@
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "prettier-watch": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "test": "jest",
-    "test:dev": "jest --watchAll",
-    "ts": "ts-node"
+    "test:dev": "jest --watchAll"
   },
   "husky": {
     "hooks": {
