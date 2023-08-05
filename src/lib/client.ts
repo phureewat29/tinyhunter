@@ -7,7 +7,6 @@ export function initMevShare() {
   const authSigner = new Wallet(Env.authKey).connect(provider);
   const executorWallet = new Wallet(Env.senderKey).connect(provider);
   const mevShare = MevShareClient.useEthereumGoerli(authSigner);
-  const wssProvider = new WebSocketProvider(Env.wssProviderUrl);
 
   console.log('mev-share auth address: ' + authSigner.address);
   console.log('executor address: ' + executorWallet.address);
@@ -17,6 +16,5 @@ export function initMevShare() {
     executorWallet,
     authSigner,
     mevShare,
-    wssProvider
   };
 }

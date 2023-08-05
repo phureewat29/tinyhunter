@@ -2,7 +2,6 @@ import { Contract } from 'ethers';
 
 import { BundleParams, IPendingTransaction } from '@flashbots/mev-share-client';
 import { initMevShare } from './lib/client';
-import { buildTx, sendTx } from './lib/tx';
 import { MEV_SHARE_CTF_SIMPLE_ABI } from './lib/abi';
 
 const TX_GAS_LIMIT = 400000;
@@ -30,17 +29,12 @@ const contract = new Contract(
   MEV_SHARE_CTF_SIMPLE_ABI,
   executorWallet,
 );
-let targetTxHash = '';
 
 async function backrunHandler(pendingTxHash: string) {
-  // ignore txs we didn't send
-  if (targetTxHash !== pendingTxHash) return;
-
-  // const targetBlock = Number(await contract.activeBlock());
   const currentBlock = await provider.getBlockNumber();
   console.log('current block', currentBlock);
-  const targetBlock = currentBlock + 2;
-  console.log('target block', targetBlock);
+  const targetBlock = Number(await contract.activeBlock());
+  console.log('target block', currentBlock);
 
   const tx = await contract.claimReward.populateTransaction();
   const nonce = await executorWallet.getNonce('latest');
@@ -68,19 +62,12 @@ async function backrunHandler(pendingTxHash: string) {
 
 const main = async () => {
   mevShare.on('transaction', async (pendingTx: IPendingTransaction) => {
-    backrunHandler(pendingTx.hash);
-  });
-
-  contract.on('Activate', async () => {
-    // send a tx that we can backrun
-    if (!targetTxHash) {
-      const { tx } = await buildTx(executorWallet, 'initial tx');
-      const txHash = await sendTx(
-        mevShare,
-        await executorWallet.signTransaction(tx),
-      );
-      console.log(`sent tx for backrun`, txHash);
-      targetTxHash = txHash;
+    if (
+      pendingTx.to === CONTRACT_ADDRESS &&
+      pendingTx.functionSelector === '0xa3c356e4' &&
+      pendingTx.callData === '0xa3c356e4'
+    ) {
+      backrunHandler(pendingTx.hash);
     }
   });
 };
