@@ -9,6 +9,7 @@
     "ctf:magic-v1": "ts-node src/ctf-magic-v1.ts",
     "ctf:magic-v2": "ts-node src/ctf-magic-v2.ts",
     "ctf:magic-v3": "ts-node src/ctf-magic-v3.ts",
+    "ctf:new-contract": "ts-node src/ctf-new-contract.ts",
     "capture": "ts-node src/capture.ts",
     "history": "ts-node src/history.ts",
     "listener": "ts-node src/listener.ts",

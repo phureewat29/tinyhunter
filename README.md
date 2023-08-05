@@ -20,12 +20,13 @@ vim .env
 
 `yarn ctf:simple 0x20a1a5857fdff817aa1bd8097027a841d4969aa5`
 
-
 `yarn ctf:magic-v1`
 
 `yarn ctf:magic-v2`
 
 `yarn ctf:magic-v3`
+
+`yarn ctf:new-contract`
 
 ### Avaliable scripts
 

@@ -2,7 +2,7 @@ import { Contract } from 'ethers';
 
 import { BundleParams, IPendingTransaction } from '@flashbots/mev-share-client';
 import { initMevShare } from './lib/client';
-import { MEV_SHARE_CTF_MAGIC_NUMBER_V1 } from './lib/abi';
+import { MEV_SHARE_CTF_MAGIC_NUMBER_V3 } from './lib/abi';
 
 const TX_GAS_LIMIT = 500000;
 const MAX_GAS_PRICE = 100n;
@@ -16,7 +16,7 @@ const CONTRACT_ADDRESS = '0xe8b7475e2790409715af793f799f3cc80de6f071';
 const { mevShare, executorWallet, provider } = initMevShare();
 const contract = new Contract(
   CONTRACT_ADDRESS,
-  MEV_SHARE_CTF_MAGIC_NUMBER_V1,
+  MEV_SHARE_CTF_MAGIC_NUMBER_V3,
   executorWallet,
 );
 
