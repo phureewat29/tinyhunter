@@ -1,0 +1,18 @@
+// 0x1ea6fb65bab1f405f8bdb26d163e6984b9108478
+{
+  hash: '0x57d2a1d25f9378cc9cd582769668833e42d4a772c0b06216be1a453f5a33a5d3',
+  logs: [
+    {
+      address: '0x1ea6fb65bab1f405f8bdb26d163e6984b9108478',
+      topics: [
+        '0x59d3ce47d6ad6c6003cef97d136155b29d88653eb355c8bed6e03fbf694570ca'
+      ],
+      data: '0x'
+    }
+  ],
+  to: null,
+  functionSelector: null,
+  callData: null,
+  gasUsed: 30000n,
+  mevGasPrice: 50000000n
+}

@@ -28,6 +28,8 @@ vim .env
 
 `yarn ctf:new-contract`
 
+`yarn ctf:triple`
+
 ### Avaliable scripts
 
 `yarn listener` - listening for pending transaction and new bundle
