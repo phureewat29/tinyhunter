@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rimraf ./build && tsc",
+    "ctf:simple": "ts-node src/ctf-simple.ts",
+    "ctf:playground": "ts-node src/ctf-playground.ts",
     "capture": "ts-node src/capture.ts",
     "history": "ts-node src/history.ts",
     "listener": "ts-node src/listener.ts",

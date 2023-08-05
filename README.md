@@ -10,6 +10,10 @@ cp .env.example .env
 vim .env
 ```
 
+### CTF
+
+`yarn ctf:simple 0x0000000` - listening for `Activate` event to call claimReward function
+
 ### Avaliable scripts
 
 `yarn listener` - listening for pending transaction and new bundle
