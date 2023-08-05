@@ -12,7 +12,7 @@ vim .env
 
 ### CTF
 
-`yarn ctf:simple 0x0000000` - listening for `Activate` event to call claimReward function
+`yarn ctf:simple 0x0000000` - listen for `Activate` event to call claimReward function
 
 ### Avaliable scripts
 
