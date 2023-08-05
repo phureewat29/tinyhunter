@@ -8,7 +8,7 @@ const TX_GAS_LIMIT = 500000;
 const MAX_GAS_PRICE = 100n;
 const MAX_PRIORITY_FEE = 100n;
 const GWEI = 10n ** 9n;
-const TIP = 100n * GWEI;
+const TIP = 10n * GWEI;
 
 const BLOCKS_TO_TRY = 3;
 const CONTRACT_ADDRESS = '0x118bcb654d9a7006437895b51b5cd4946bf6cdc2';
