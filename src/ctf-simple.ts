@@ -33,8 +33,6 @@ const contract = new Contract(
 async function backrunHandler(pendingTxHash: string) {
   const currentBlock = await provider.getBlockNumber();
   console.log('current block', currentBlock);
-  const targetBlock = Number(await contract.activeBlock());
-  console.log('target block', currentBlock);
 
   const tx = await contract.claimReward.populateTransaction();
   const nonce = await executorWallet.getNonce('latest');
@@ -49,13 +47,13 @@ async function backrunHandler(pendingTxHash: string) {
   const signedTx = await executorWallet.signTransaction(claimTx);
   const bundleParams: BundleParams = {
     inclusion: {
-      block: targetBlock,
-      maxBlock: targetBlock + BLOCKS_TO_TRY,
+      block: currentBlock,
+      // maxBlock: currentBlock + BLOCKS_TO_TRY,
     },
     body: [{ hash: pendingTxHash }, { tx: signedTx, canRevert: false }],
   };
-  const simResult = await mevShare.simulateBundle(bundleParams);
-  console.log('sim result', simResult);
+  // const simResult = await mevShare.simulateBundle(bundleParams);
+  // console.log('sim result', simResult);
   const sendBundleResult = await mevShare.sendBundle(bundleParams);
   console.log('bundle hash', sendBundleResult.bundleHash);
 }
@@ -66,6 +64,7 @@ const main = async () => {
       pendingTx.to === CONTRACT_ADDRESS &&
       pendingTx.functionSelector === '0xa3c356e4'
     ) {
+      console.log('found activeRewardSimple tx!', pendingTx.hash);
       backrunHandler(pendingTx.hash);
     }
   });
