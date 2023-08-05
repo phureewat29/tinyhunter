@@ -35,7 +35,7 @@ async function backrunHandler(pendingTxHash: string) {
       maxFeePerGas: MAX_GAS_PRICE * GWEI + TIP,
       maxPriorityFeePerGas: MAX_PRIORITY_FEE * GWEI + TIP,
       gasLimit: TX_GAS_LIMIT,
-      nonce: nonce,
+      nonce: nonce + i,
     });
     txs.push({ tx: signedTx, canRevert: false });
   }
