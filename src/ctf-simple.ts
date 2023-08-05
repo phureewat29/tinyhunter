@@ -64,8 +64,7 @@ const main = async () => {
   mevShare.on('transaction', async (pendingTx: IPendingTransaction) => {
     if (
       pendingTx.to === CONTRACT_ADDRESS &&
-      pendingTx.functionSelector === '0xa3c356e4' &&
-      pendingTx.callData === '0xa3c356e4'
+      pendingTx.functionSelector === '0xa3c356e4'
     ) {
       backrunHandler(pendingTx.hash);
     }
