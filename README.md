@@ -1,6 +1,6 @@
-# Tinyhunter
+# Tinyhunter Flashbots CTF
 
-A tiny framework to participate Flashbots CTF
+A tiny framework to solve all 10 challenges in Flashbots CTF: https://ctf.flashbots.net/
 
 ### Setup
 
@@ -30,14 +30,6 @@ vim .env
 
 `yarn ctf:triple`
 
-### Playground Scripts
+### Scripts
 
 `yarn listener` - listening for pending transaction and new bundle
-
-`yarn history` - get historical event stream data
-
-`yarn backrun` - perform a backrun
-
-`yarn send-tx` - submit a transaction
-
-`yarn send-bundle` - submit a bundle

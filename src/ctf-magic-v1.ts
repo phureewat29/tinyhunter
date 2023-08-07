@@ -30,32 +30,34 @@ async function backrunHandler(
 
   const nonce = await executorWallet.getNonce('latest');
 
-  const txs = [];
-  for (
-    let i = 0, magicNumber = lowerBound;
-    magicNumber <= upperBound;
-    i++, magicNumber++
-  ) {
-    const tx = await contract.claimReward.populateTransaction(magicNumber);
-    const signedTx = await executorWallet.signTransaction({
-      ...tx,
-      chainId: 5,
-      maxFeePerGas: MAX_GAS_PRICE * GWEI + TIP,
-      maxPriorityFeePerGas: MAX_PRIORITY_FEE * GWEI + TIP,
-      gasLimit: TX_GAS_LIMIT,
-      nonce: nonce + i,
-    });
-    txs.push({ tx: signedTx, canRevert: true });
-  }
+  const magicNumberList = [];
+  for (let i = lowerBound; i < upperBound; i++) magicNumberList.push(i);
 
-  const bundleParams: BundleParams = {
-    inclusion: { block: currentBlock, maxBlock: currentBlock + BLOCKS_TO_TRY },
-    body: [{ hash: pendingTxHash }, ...txs],
-  };
-  // const simResult = await mevShare.simulateBundle(bundleParams);
-  // console.log('sim result', simResult);
-  const sendBundleResult = await mevShare.sendBundle(bundleParams);
-  console.log('bundle hash', sendBundleResult.bundleHash);
+  await Promise.all(
+    magicNumberList.map(async (magicNumber) => {
+      const tx = await contract.claimReward.populateTransaction(magicNumber);
+      const signedTx = await executorWallet.signTransaction({
+        ...tx,
+        chainId: 5,
+        maxFeePerGas: MAX_GAS_PRICE * GWEI + TIP,
+        maxPriorityFeePerGas: MAX_PRIORITY_FEE * GWEI + TIP,
+        gasLimit: TX_GAS_LIMIT,
+        nonce: nonce,
+      });
+
+      const bundleParams: BundleParams = {
+        inclusion: {
+          block: currentBlock,
+          maxBlock: currentBlock + BLOCKS_TO_TRY,
+        },
+        body: [{ hash: pendingTxHash }, { tx: signedTx, canRevert: false }],
+      };
+      // const simResult = await mevShare.simulateBundle(bundleParams);
+      // console.log('sim result', simResult);
+      const sendBundleResult = await mevShare.sendBundle(bundleParams);
+      console.log('bundle hash', sendBundleResult.bundleHash);
+    }),
+  );
 }
 
 const ruleFunc = (pendingTx: IPendingTransaction) =>

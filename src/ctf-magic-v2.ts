@@ -31,9 +31,7 @@ async function backrunHandler(
   const nonce = await executorWallet.getNonce('latest');
 
   const magicNumberList = [];
-  for (let i = lowerBound; i < upperBound; i++) {
-    magicNumberList.push(i);
-  }
+  for (let i = lowerBound; i < upperBound; i++) magicNumberList.push(i);
 
   await Promise.all(
     magicNumberList.map(async (magicNumber) => {
@@ -53,10 +51,10 @@ async function backrunHandler(
         },
         body: [{ hash: pendingTxHash }, { tx: signedTx, canRevert: false }],
       };
-      const sendBundleResult = await mevShare.sendBundle(bundleParams);
-      console.log('bundle hash', sendBundleResult.bundleHash);
       // const simResult = await mevShare.simulateBundle(bundleParams);
       // console.log('sim result', simResult);
+      const sendBundleResult = await mevShare.sendBundle(bundleParams);
+      console.log('bundle hash', sendBundleResult.bundleHash);
     }),
   );
 }

@@ -1,4 +1,4 @@
-import { JsonRpcProvider, Wallet, WebSocketProvider } from 'ethers';
+import { JsonRpcProvider, Wallet } from 'ethers';
 import MevShareClient from '@flashbots/mev-share-client';
 import Env from './env';
 

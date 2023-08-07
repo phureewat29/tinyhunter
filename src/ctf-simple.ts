@@ -95,7 +95,6 @@ const modeResolver = () => {
 
 const main = async () => {
   const ruleFunc = modeResolver();
-  console.log('rule:', ruleFunc);
   mevShare.on('transaction', async (pendingTx: IPendingTransaction) => {
     if (ruleFunc(pendingTx)) {
       backrunHandler(pendingTx.hash);
